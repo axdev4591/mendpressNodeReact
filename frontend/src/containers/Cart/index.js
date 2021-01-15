@@ -6,9 +6,8 @@ import CartPrice from '../../components/CartPrice';
 
 import React, { useEffect, useState } from 'react';
 import { addToCart, 
-    updateCart } from '../actions/cartActions';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+    updateCart } from '../../store/actions/cartActions'
+import { useDispatch, useSelector } from 'react-redux'
 
 
 const Cart = (props) => {
@@ -24,7 +23,7 @@ const Cart = (props) => {
   const qty = props.location.search ? Number(props.location.search.split("=")[1]) : 1;
   const dispatch = useDispatch();
 
-  
+ 
   useEffect(() => {
     if (productId) {
       dispatch(addToCart(productId, qty));
@@ -32,15 +31,15 @@ const Cart = (props) => {
   }, []);
 
 
-    decreaseQuantity = (e, productId) => {
+  const decreaseQuantity = (e, productId) => {
         updateCart(productId, -1)
     }
 
-    increaseQuantity = (e, productId) => {
+  const increaseQuantity = (e, productId) => {
         updateCart(productId, 1);
     }
 
-    updateCart = async (productId, quantity) => {
+  const  updateCart = async (productId, quantity) => {
         try{
             
             let product = cartItems.find(item => item.product === productId);
@@ -68,7 +67,7 @@ const Cart = (props) => {
         
     }
 
-    changeQuantity = (e, productId) => {
+  const changeQuantity = (e, productId) => {
 
         // console.log(e.target.value);
 

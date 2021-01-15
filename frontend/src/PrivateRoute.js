@@ -1,12 +1,19 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 
-const PrivateRoute = ({component: Component, ...rest}) => (
-    <Route {...rest} render={(props) => {
-        const authData = window.localStorage.getItem('auth');
-        if(authData){
-            const auth = JSON.parse(authData);
-            if(auth.hasOwnProperty('token') && auth.token !== ''){
+
+
+const PrivateRoute = ({component: Component, ...rest}) => {
+    const userSignin = useSelector(state => state.userSignin);
+    const { userInfo } = userSignin
+    
+    return <Route {...rest} render={(props) => {
+        
+
+        if(userInfo){
+          
+            if(userInfo.token !== ''){
                 return <Component {...props} />
             }else{
                 return <Redirect to="/login" />
@@ -17,6 +24,6 @@ const PrivateRoute = ({component: Component, ...rest}) => (
         
 
     }} />
-)
+}
 
 export default PrivateRoute;

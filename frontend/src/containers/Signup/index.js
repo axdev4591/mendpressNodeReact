@@ -1,12 +1,12 @@
 import './style.css';
 import Logo from './MEND.png';
-import MobileTypeInput from '../../components/UI/MobileTypeInput';
-import SubmitGradientButton from '../../components/UI/SubmitGradientButton';
-import * as authActions from '../../store/actions/authActions';
-import React, { useEffect, useState } from 'react';
+import MobileTypeInput from '../../components/UI/MobileTypeInput'
+import SubmitGradientButton from '../../components/UI/SubmitGradientButton'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { register } from '../actions/userActions';
+import { useSelector, useDispatch } from 'react-redux'
+import { register } from '../../store/actions/userActions'
+import Error from '../../components/Error';
 
 const Signup = (props) => {
 
@@ -16,23 +16,25 @@ const Signup = (props) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [errorMessage, setErrorMessage] = useState('')
+  const [isError, setIsError]  = useState(false)
   const userRegister = useSelector(state => state.userRegister);
   const { loading, userInfo, error } = userRegister;
  
-  const redirect = props.location.search ? props.location.search.split("=")[1] : '/';
+  //const redirect = props.location.search ? props.location.search.split("=")[1] : '/';
   const dispatch = useDispatch();
 
+  /*
   useEffect(() => {
     if (userInfo) {
-      props.history.push(redirect);
+      props.history.push('/');
     }
     return () => {
       //
     };
-  }, [userInfo])
+  }, [userInfo])*/
   
 
-    signupHandler = (e) => {
+   const signupHandler = (e) => {
         e.preventDefault()
 
         if(firstName === ''){
@@ -93,7 +95,7 @@ const Signup = (props) => {
                             type="text"
                             placeholder="First Name"
                             value={firstName}
-                            onChange={(e) => setFirstName(e.target.value)}
+                            textChange={(e) => setFirstName(e.target.value)}
                             name="firstName"
                         />
                     </div>
@@ -102,7 +104,7 @@ const Signup = (props) => {
                             type="text"
                             placeholder="Last Name"
                             value={lastName}
-                            onChange={(e) => setLastName(e.target.value)}
+                            textChange={(e) => setLastName(e.target.value)}
                             name="lastName"
                         />
                     </div>
@@ -113,21 +115,21 @@ const Signup = (props) => {
                     type="text"
                     placeholder="Email"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    textChange={(e) => setEmail(e.target.value)}
                     name="email"
                 />
                 <MobileTypeInput 
                     type="password"
                     placeholder="Password"
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    textChange={(e) => setPassword(e.target.value)}
                     name="password"
                 />
                 <MobileTypeInput 
                     type="password"
                     placeholder="Re-enter Password"
                     value={repassword}
-                    onChange={(e) => setRepassword(e.target.value)}
+                    textChange={(e) => setRepassword(e.target.value)}
                     name="repassword"
                 />
                 

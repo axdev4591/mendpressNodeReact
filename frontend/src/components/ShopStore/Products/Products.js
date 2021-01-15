@@ -1,138 +1,110 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import * as productActions from '../../../store/actions/productActions';
-import { connect } from 'react-redux';
+
 import './style.css';
 import Product from './Product';
+import React, { useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux'
+import {usePath} from 'hookrouter'
 
-class Products extends Component{
+import {listCategories, listProducts} from '../../../store/actions/productActions'
 
-    state = {
-        slug: 'Toutes Nos Oeuvres'
-    }
 
-    componentDidMount() {
-        const slug = this.props.match.params.slug  == 'Toutes Nos Oeuvres' ? '' : this.props.match.params.slug
-        this.getProducts(slug);
-        this.props.getCategories();
-    }
+const Products = (props) => {
 
-    getProducts = (categorySlug = '', filter = null) => {
-       
-        this.props.getProducts(categorySlug, filter)
-        .then(response => {
+    const [title, setTitle] = useState('Toutes Nos Oeuvres')
+    const [slug, setSlug] = useState('')
+    const [filter, setFilter] = useState(1)
+    const productList = useSelector((state) => state.productList)
+    const {loading, products} = productList
 
-            console.log("aahaha"+response);
+    const categoryList = useSelector((state) => state.categoryList)
+    const {categories} = categoryList
+    const url = usePath()
+    const dispatch = useDispatch()
 
-            this.setState({
-                 products: response.message
-           })
-        });
-    }
-
-    componentDidUpdate(prevProps){
-        if(this.props.match.params.slug != prevProps.match.params.slug){
-            this.getProducts(this.props.match.params.slug);
+    console.log("##########################this the slug: "+slug)
+    console.log("##########################this the path: "+url)
+    
+    useEffect(() => {
+              
+        dispatch(listProducts(slug, filter))
+        dispatch(listCategories())
+        
+        return () => {
+          //
         }
+      }, [slug, filter, url])
 
-        
-    }
+  
+    return (
 
-    applyFilter = (filter) => {
-        const slug = this.props.match.params.slug == 'Toutes Nos Oeuvres' ? '' : this.props.match.params.slug
-        this.getProducts(slug, filter);
-    }
-
-    categoryTree(categories){
-        var categoriesAr = [];
-        for(var value of categories){
-
-            categoriesAr.push(
-                    <li key={value.slug}>
-                        <Link to={`/products/${value.slug}`}>{value.name}</Link>
-                        {value.children.length > 0 ? (<ul>{this.categoryTree(value.children)}</ul>) : null}
-                    </li>
-            );
-        }
-
-        return categoriesAr;
-    }
-
-    render() {
-
-        const slug = Object.keys(this.props.match.params).length > 0 ? this.props.match.params.slug : this.state.slug;
-
-        
-        
-        return (
-
-            <div className="Content">
-                    <div className="ContentTitle">
-                        <h2 className="CategoryTitle">{slug}</h2>
-                    </div>
-                    <div className="ContentBody">
-                        <div className="SideMenu">
-                            <h3 className="SideMenuTitle">Filtres</h3>
-                            <div className="Filter">
-                                <p className="FilterTitle">Categories</p>
-                                <ul>
-                                    {
-                                        this.props.products.categories.length > 0 ? 
-                                        this.categoryTree(this.props.products.categories) : null
-                                    }
-                                </ul>
-                            </div>
-                            
-                           <div style={{marginTop: "12px"}} className="Filter">
-                               <p className="FilterTitle">Prix</p>
-                               <div>
-                                <button onClick={() => this.applyFilter({price:1} )} className="FilterButton">Tri croissant</button>
-                               </div>
-                               <div>
-                                    <button onClick={() => this.applyFilter({price: -1})} className="FilterButton">Tri décroissant</button>
-                               </div>
-                               
-                           </div>
-                       
+        <div className="Content">
+                <div className="ContentTitle">
+                     <h2 className="CategoryTitle">{title}</h2>
+                </div>
+                <div className="ContentBody">
+                    <div className="SideMenu">
+                        <h3 className="SideMenuTitle">Filtres</h3>
+                        <div className="Filter">
+                            <p className="FilterTitle">Categories</p>
+                            <ul>
+                                {
+                                    categories.map((value) => ( 
+                                    <li key={value._id}>
+                                    <Link to={`/products/${value.slug}`} onClick={() => {
+                                             
+                                            setSlug(value.slug)
+                                            setTitle(value.name)
+            
+                                    } }>{value.name}
+                                    </Link>
+                                   
+                                    </li>))
+                                    
+                                }
+                            </ul>
                         </div>
                         
-                        <div className="MainContent">
-
-                        <div className="ProductArea">
-                            {
-                                this.props.products.products.map(product => <Product
-                                    key={product._id}
-                                    id={product._id}
-                                    name={product.name}
-                                    price={product.price}
-                                    imageUrl={product.imageUrl}
-                                    slug={product.slug}
-                                />)
-                            }
+                        <div className="Filter">
+       
+                            <p className="FilterTitle">Prix</p>
+                            <div>
+                                <button onClick={() => setFilter(1)} className="FilterButton">Tri croissant</button>
+                            </div>
+                            <div>
+                                <button onClick={() => setFilter(-1)} className="FilterButton">Tri décroissant</button>
+                            </div>
                             
                         </div>
-
-                            
-                        </div>
-
+                    
                     </div>
+                    
+                    <div className="MainContent">
+
+                    <div className="ProductArea">
+                        {
+                            products.map(product => <Product
+                                key={product._id}
+                                id={product._id}
+                                name={product.name}
+                                price={product.price}
+                                description={product.description}
+                                imageUrl={product.imageUrl}
+                                slug={product.slug}
+                            />)
+                        }
+                        
+                    </div>
+
+                        
+                    </div>
+
                 </div>
-            
-        );
-    }
+            </div>
+        
+    )
+    
 }
 
-const mapDispatchToProps = dispatch => {
-    return {
-        getProducts: (categorySlug, filter) => dispatch(productActions.getProducts(categorySlug, filter)),
-        getCategories: () => dispatch(productActions.getCategories())
-    }
-}
 
-const mapStateToProps = state => {
-    return {
-        products: state.products
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Products);
+export default Products

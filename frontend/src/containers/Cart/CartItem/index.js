@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import './style.css';
 import {
-    clearCart } from '../actions/cartActions';
+    clearCart } from '../../../store/actions/cartActions'
 
 
 const CartItem = props => {

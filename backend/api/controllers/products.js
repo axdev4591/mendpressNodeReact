@@ -42,27 +42,49 @@ exports.createProduct = (req, res, next) => {
 
 exports.getAllProducts = (req, res, next) => {
 
-    Product.find()
-    .select('_id name price description slug imageUrl stock createdAt category')
-    .exec()
-    .then(products => {
-        res.status(200).json({
-            message: products
+    const filter = req.params.filter
+
+    if(filter){
+        Product.find().sort({price: filter})
+        .select('_id name price description slug imageUrl stock createdAt category')
+        .exec()
+        .then(products => {
+            res.status(200).json({
+                message: products
+            })
+            console.log("success get all product" + er)
         })
-        console.log("success get all product" + er)
-    })
-    .catch(er => {
-        res.status(500).json({
-            error: er
+        .catch(er => {
+            res.status(500).json({
+                error: er
+            })
+            console.log("error while creating product" + er)
         })
-        console.log("error while creating product" + er)
-    })
+    }else{
+        Product.find()
+        .select('_id name price description slug imageUrl stock createdAt category')
+        .exec()
+        .then(products => {
+            res.status(200).json({
+                message: products
+            })
+            console.log("success get all product" + er)
+        })
+        .catch(er => {
+            res.status(500).json({
+                error: er
+            })
+            console.log("error while creating product" + er)
+        })
+    }
+    
 
 }
 
-exports.getProduct = (req, res, next) => {
+exports.getSingleProduct = (req, res, next) => {
 
     const productSlug = req.params.productSlug;
+    console.log("can't get single product "+JSON.stringify(productSlug) )
     
     Product.findOne({slug: productSlug})
     .exec()
@@ -72,10 +94,11 @@ exports.getProduct = (req, res, next) => {
                 message: product
             });
         }else{
+            console.log("can't get single product " )
             return res.status(404).json({
                 message: 'Not Found'
-            }
-            )
+            })
+           
         }
     })
     .catch(err => {
@@ -88,13 +111,17 @@ exports.getProduct = (req, res, next) => {
 
 }
 
-exports.getCategorySlug = (req, res, next) => {
+exports.getProductsByCategory = (req, res, next) => {
 
     let filter = {};
     if(req.query.hasOwnProperty("filter")){
         filter['price'] = req.query.price
+        console.log("req.query.price: "+JSON.stringify(req.query.price))
     }
-    
+    console.log('\n\n')
+    console.log("##############requery: "+JSON.stringify(req.query))
+    console.log('\n\n')
+    filter['price'] = req.params.filter
     const slug = req.params.categorySlug;
     Category.findOne({slug: slug})
     .select('_id parent')

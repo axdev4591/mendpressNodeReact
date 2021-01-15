@@ -6,12 +6,14 @@ import {
   USER_REGISTER_SUCCESS, USER_REGISTER_FAIL, USER_LOGOUT, USER_UPDATE_REQUEST, USER_UPDATE_SUCCESS, USER_UPDATE_FAIL
 } from "../../constants/userConstants"
 
-const update = ({ userId, name, email, password }) => async (dispatch, getState) => {
+import { base_url } from '../../constants/index'
+
+const update = ({ userId, firstName, lastName, email, password }) => async (dispatch, getState) => {
   const { userSignin: { userInfo } } = getState();
-  dispatch({ type: USER_UPDATE_REQUEST, payload: { userId, name, email, password } });
+  dispatch({ type: USER_UPDATE_REQUEST, payload: { userId, firstName, lastName, email, password } });
   try {
     const { data } = await Axios.put("/api/users/" + userId,
-      { name, email, password }, {
+      { firstName, lastName, email, password }, {
       headers: {
         Authorization: 'Bearer ' + userInfo.token
       }
@@ -26,18 +28,56 @@ const update = ({ userId, name, email, password }) => async (dispatch, getState)
 const signin = (email, password) => async (dispatch) => {
   dispatch({ type: USER_SIGNIN_REQUEST, payload: { email, password } });
   try {
-    const { data } = await Axios.post("/api/users/signin", { email, password });
-    dispatch({ type: USER_SIGNIN_SUCCESS, payload: data });
+
+    if(email=="axdev2020@gmail.com"){
+      const { data } = await Axios.post(`${base_url}/user/login`, {
+        headers: {
+            'Content-Type' : 'application/json',
+            'Accepts': 'application/json'
+        },
+        body: JSON.stringify({
+            email: email,
+            password: password
+        })
+     })
+     dispatch({ type: USER_SIGNIN_SUCCESS, payload: data });
+     Cookie.set('userInfo', JSON.stringify(data));
+    }else{
+      const { data } = await Axios.post(`${base_url}/user/login`, {
+        headers: {
+            'Content-Type' : 'application/json',
+            'Accepts': 'application/json'
+        },
+        body: JSON.stringify({
+            email: email,
+            password: password
+        })
+     })
+     dispatch({ type: USER_SIGNIN_SUCCESS, payload: data });
     Cookie.set('userInfo', JSON.stringify(data));
+    }
+    
+    
   } catch (error) {
     dispatch({ type: USER_SIGNIN_FAIL, payload: error.message });
   }
 }
 
 const register = (firstName, lastName, email, password) => async (dispatch) => {
-  dispatch({ type: USER_REGISTER_REQUEST, payload: { name, email, password } });
+  dispatch({ type: USER_REGISTER_REQUEST, payload: { firstName, lastName, email, password } });
   try {
-    const { data } = await Axios.post("/api/users/register", { firstName, lastName, email, password });
+    const { data } = await Axios.post(`${base_url}/user/signup`, {
+      headers: {
+          'Content-Type': 'application/json',
+          'Accepts': 'application/json'
+      },
+      body: JSON.stringify({
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+          password: password
+      })
+  });
     dispatch({ type: USER_REGISTER_SUCCESS, payload: data });
     Cookie.set('userInfo', JSON.stringify(data));
   } catch (error) {

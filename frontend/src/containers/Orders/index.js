@@ -1,49 +1,43 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import './style.css';
 import Header from '../../components/Header/Header'
-import { base_url } from '../../constants/index';
-
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import {base_url} from '../../constants/index'
 
 
 
 const Orders = (props) => {
 
   const userSignin = useSelector(state => state.userSignin);
-  const { loading, userInfo, error } = userSignin;
-  const dispatch = useDispatch();
-
-  [ordersList, setOrderList] = useState([])
-
-    state = {
-        ordersList: []
-    }
+  const { loading, userInfo, error } = userSignin
+  const [ordersList, setOrderList] = useState([])
 
 
-    if(!userInfo.isAuthenticated){
+  useEffect(() => {
+    
+    if(!userInfo){
         
             if(userInfo.token){
-                this.getOrders();
-                console.log("standard user: "+result)
+                getOrders()
+                console.log("standard user")
             }else{
-                this.props.history.push('/login');
+                props.history.push('/login');
             }  
         
     }else{
         if(userInfo.firstName == "admin"){
-            this.adminGetAllOrders();
+            adminGetAllOrders()
         }else{
-            this.getOrders();
+            getOrders()
         }
     
     }
+    return () => {
+    };
+  }, [userInfo]);
 
-    getOrders = () => {
-        console.log(userInfo.isAuthenticated)
-        console.log("my token ord: "+ token)
+     const getOrders = () => {
+        console.log(userInfo)
 
         fetch(`${base_url}/order/getorders/${userInfo._id}`, {
             headers: {
@@ -64,7 +58,7 @@ const Orders = (props) => {
     }
 
     /****get all orders for administration back office */
-    adminGetAllOrders =  () => {
+    const adminGetAllOrders =  () => {
 
         fetch(`${base_url}/order/getusers`, {
             headers: {
@@ -86,10 +80,8 @@ const Orders = (props) => {
                 .then(response => response.json())
                 .then(jsonResponse => {
                     console.log("get all orders for admin: "+jsonResponse.message);
-                    this.setState(
-                        prevState => ({ ordersList: prevState.ordersList.concat(jsonResponse.message) })
-                    );
-                    setOrderList( prevState => setOrderList( prevState.ordersList.concat(jsonResponse.message) ))
+                   
+                   // setOrderList( prevState => setOrderList( prevState.ordersList.concat(jsonResponse.message) ))
                 })
                 .catch(error => {
                     console.log(error);
@@ -104,12 +96,12 @@ const Orders = (props) => {
     }
     
 
-    formatDate = (date) => {
+    const formatDate = (date) => {
         let d = new Date(date);
         return `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`;
     }
 
-    getOrderTotal = (id) => {
+    const getOrderTotal = (id) => {
         const singleOrder = ordersList.find(order => order._id === id);
         let orderTotal = 0;
         singleOrder.order.forEach(order => {
@@ -167,8 +159,8 @@ const Orders = (props) => {
                                         ))}
                                     </div>
                                     <div className="OrderFooter">
-                                        <p>Commande passée le <span>{this.formatDate(order.orderDate)}</span></p>
-                                        <p>Total de la commande <span>{this.getOrderTotal(order._id)}€</span></p>
+                                        <p>Commande passée le <span>{formatDate(order.orderDate)}</span></p>
+                                        <p>Total de la commande <span>{getOrderTotal(order._id)}€</span></p>
                                     </div>
                                 </div>
                             )
@@ -183,4 +175,4 @@ const Orders = (props) => {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(Orders);
+export default Orders

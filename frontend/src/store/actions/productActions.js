@@ -1,5 +1,3 @@
-import { base_url } from "../../constants/index";
-
 
 import {
     PRODUCT_LIST_REQUEST,
@@ -21,6 +19,7 @@ import {
     PRODUCT_REVIEW_SAVE_FAIL,
     PRODUCT_REVIEW_SAVE_SUCCESS,
   } from '../../constants/productConstants'
+  
   import axios from 'axios'
   import Axios from 'axios'
   import { base_url } from '../../constants/index'
@@ -43,7 +42,8 @@ import {
                     query = query.substring(0, query.length-1);
                 }
 
-                const response = await fetch(`${base_url}/products/${categorySlug}${query}`);
+                const response = await fetch(`${base_url}/products/${categorySlug}${query}`)
+                
                 const jsonResponse = await response.json();
                 if(response.status == 200){
                     dispatch({
@@ -52,6 +52,7 @@ import {
                     });
                 }
 
+                console.log("########prod "+JSON.stringify(jsonResponse.message))
                 return jsonResponse;
 
             }catch(error){
@@ -62,16 +63,36 @@ import {
     }
 
   //retrieve product for admin dashboard
-  const listProducts = () => async (dispatch) => {
-    
-    try {
-      dispatch({ type: PRODUCT_LIST_REQUEST });
-      const { data } = await axios.get(`${base_url}/products`)
-    
-      dispatch({ type: PRODUCT_LIST_SUCCESS, payload: data.message })
-    } catch (error) {
-      dispatch({ type: PRODUCT_LIST_FAIL, payload: error.message })
-    }
+  const listProducts = (categorySlug = '', filter) => async (dispatch) => {
+    console.log("list des produit: *****************")
+     
+        if(categorySlug == ''){
+          try{
+            dispatch({ type: PRODUCT_LIST_REQUEST });
+            const { data } = await axios.get(`${base_url}/products/${filter}`)
+            console.log(`${base_url}/products/${filter}`)
+      
+            dispatch({ type: PRODUCT_LIST_SUCCESS, payload: data.message })
+          }
+          catch (error) {
+            dispatch({ type: PRODUCT_LIST_FAIL, payload: error.message })
+          }
+        }
+        else{
+          try{
+
+
+          dispatch({ type: PRODUCT_LIST_REQUEST });
+          const { data } = await axios.get(`${base_url}/products/${categorySlug}/${filter}`)
+          console.log(`${base_url}/products/${categorySlug}/${filter}`)
+      
+          dispatch({ type: PRODUCT_LIST_SUCCESS, payload: data.message })
+          }catch (error) {
+            dispatch({ type: PRODUCT_LIST_FAIL, payload: error.message })
+          }
+        }
+
+
   
   }
   
@@ -89,7 +110,7 @@ import {
   }
 
   //Create product or update product
-  const saveProduct = (product) => async (dispatch) => {
+  const saveProduct = (product) => async (dispatch, getState) => {
     
     try {
         const {
@@ -122,7 +143,7 @@ import {
             const { data } = await Axios.put(`${base_url}/products/update/${product._id}`,  products, {
                 headers: {
                 'Content-Type': 'application/json',
-                'auth-token': token
+                'auth-token':  userInfo.token
             },
             }
             )
@@ -139,12 +160,14 @@ import {
 
 
   //get prodcut detail
-  const detailsProduct = (productId) => async (dispatch) => {
+  const detailsProduct = (categorySlug, productSlug) => async (dispatch) => {
     try {
       
-      dispatch({ type: PRODUCT_DETAILS_REQUEST, payload: productId });
-      const { data } = await axios.get('/api/products/' + productId);
-      dispatch({ type: PRODUCT_DETAILS_SUCCESS, payload: data });
+      dispatch({ type: PRODUCT_DETAILS_REQUEST, payload: productSlug })
+      const { data } = await axios.get(`${base_url}/products/detail/${categorySlug}/${productSlug}`);
+      dispatch({ type: PRODUCT_DETAILS_SUCCESS, payload: data.message })
+      console.log("detail prod*********"+JSON.stringify(data.message))
+      
     } catch (error) {
       dispatch({ type: PRODUCT_DETAILS_FAIL, payload: error.message });
     }

@@ -1,20 +1,22 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import PrivateRoute from '../PrivateRoute';
-import Shop from './Shop';
+import './style.css';
 import Login from './Login';
 import Signup from './Signup';
 import ForgetPassword from './ForgetPassword';
 import ControlPanel from './ControlPanel';
-
+import ProductDetails from './ProductDetails';
 import { Provider } from 'react-redux';
-import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
+import Cookie from 'js-cookie';
 import Home from './Home';
 import Cart from './Cart';
 import PlaceOrder from './PlaceOrder';
 import ThankYou from './ThankYou';
 import Orders from './Orders';
+import ShopeStore from '../components/ShopStore/ShopStore'
 
 //Product reducer for admin
 import {
@@ -39,7 +41,7 @@ const userInfo = Cookie.getJSON('userInfo') || null;
 const initialState = {
   cart: { cartItems, shipping: {}, payment: {} },
   userSignin: { userInfo },
-};
+}
 
 const reducer = combineReducers({
   userSignin: userSigninReducer,
@@ -63,6 +65,11 @@ const store = createStore(
   composeEnhancer(applyMiddleware(thunk))
 );
 
+
+//const store = createStore(rootReducers, applyMiddleware(thunk));
+
+window.store = store;
+
 function App() {
   return (
 
@@ -71,17 +78,19 @@ function App() {
         <div className="App">
             <Switch>
               
-              <Route path="/login" component={Login} />
+             {/**
               <Route path="/signup" component={Signup} />
               <Route path="/forget-password" component={ForgetPassword} />
               <Route path="/cpanel" component={ControlPanel} />
-              <Route path="/products/:category/:slug" component={ProductDetails} />
-              <Route path="/products"  component={Shop} />
+             a retirer <Route path="/products/:category/:slug" component={ProductDetails} />
+             a retirer <Route path="/products"  component={Shop} />
               <PrivateRoute path="/cart" component={Cart} />
               <PrivateRoute path="/place-order" component={PlaceOrder} />
               <PrivateRoute path="/thank-you" component={ThankYou} />
-              <PrivateRoute path="/orders" component={Orders} />
-              <Route path="/"  component={Shop} />         
+              <PrivateRoute path="/orders" component={Orders} />*/}  
+              <Route path="/login" component={Login} />
+              <Route path="/"  component={ShopeStore} /> 
+                 
                          
             </Switch>
                      

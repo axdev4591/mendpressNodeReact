@@ -1,15 +1,12 @@
-import React, { Component } from 'react';
 import Header from '../../components/Header/Header';
 import './style.css';
-import NormalInput from '../../components/UI/NormalInput';
-import * as authActions from '../../store/actions/authActions';
-import { connect } from 'react-redux';
+import NormalInput from '../../components/UI/NormalInput'
 import AddressForm from './AddressForm';
 import CartPrice from '../../components/CartPrice';
 import DeliveryAddress from './DeliveryAddress';
 import RadioButton from '../../components/UI/RadioButton';
 import { base_url } from '../../constants/index';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -33,7 +30,6 @@ const PlaceOrder = (props) => {
     const [newAddress, setNewAddress] = useState(false)
     const [isAddressConfirm, setIsAddressConfirm] = useState(false)
     const [isOrderConfirm, setIsOrderConfirm] = useState(false)
-    const [existingAddress, setExistingAddress] = useState(false)
     const [selectedPaymentType, setSelectedPaymentType] = useState('COD')
     const [paymentTypes, setPaymentTypes] = useState([
         {id: 1, value: 'card', label: 'Credit Card / Debit Card / ATM Card', isActive: false},
@@ -44,7 +40,7 @@ const PlaceOrder = (props) => {
 
 
 
-    getAddresses = () => {
+    const getAddresses = () => {
         fetch(`${base_url}/user/get-addresses/`+userInfo._id, {
             headers: {
                 'auth-token': userInfo.token
@@ -66,7 +62,7 @@ const PlaceOrder = (props) => {
         });
     }
 
-    inputHandler = (e) => {
+    const inputHandler = (e) => {
         const updatedAddress = {
             ...address,
             [e.target.name] :  e.target.value
@@ -75,24 +71,24 @@ const PlaceOrder = (props) => {
         setAddress(updatedAddress)
     }
 
-    addressSelector = (e) => {
+    const  addressSelector = (e) => {
         setSelectedAddress(e.target.value)
         setExistingAddress(true)
         setNewAddress(false)
     }
 
-    newAddressSelection = (e) => {
+    const newAddressSelection = (e) => {
         setSelectedAddress('newAddressId')
         setExistingAddress(false)
         setNewAddress(true)
     }
 
-    addressSubmitHandler = (e) => {
+    const addressSubmitHandler = (e) => {
         e.preventDefault()
         console.log(address)
 
         const address = {
-            userId: userInfo_id,
+            userId: userInfo._id,
             address: address
         }
 
@@ -126,19 +122,19 @@ const PlaceOrder = (props) => {
        })
     }
 
-    confirmDeliveryAddress = () => {
+    const confirmDeliveryAddress = () => {
         setIsAddressConfirm(true)
     }
 
-    confirmOrder = () => {
+    const  confirmOrder = () => {
         setIsOrderConfirm(true)
     }
 
-    selectPaymentOption = (e) => {
+    const selectPaymentOption = (e) => {
         setSelectedPaymentType(e.target.value)
     }
 
-    submitOrder = async () => {
+    const submitOrder = async () => {
 
         if(!isOrderConfirm){
             return
@@ -206,7 +202,7 @@ const PlaceOrder = (props) => {
                         <div className="DeliveryAddress">
 
                             <div className="Card">
-                                <p className="CardText">Login {userInfo.isAuthenticated ? <i className="fas fa-check"></i> : null}</p>
+                                <p className="CardText">Login {userInfo ? <i className="fas fa-check"></i> : null}</p>
                                 <p className="CardText">Email: {userInfo.email}</p>
                             </div>
 
@@ -226,7 +222,7 @@ const PlaceOrder = (props) => {
                                         addresses.length && addresses.map(address => 
                                             <DeliveryAddress 
                                                 key={address._id} 
-                                                onAddressSelection={this.addressSelector} 
+                                                onAddressSelection={addressSelector} 
                                                 value={selectedAddress}
                                                 address={getaddress} />
                                         )

@@ -27,7 +27,18 @@
     border: 1px solid #cecece;
     border-radius: 5px;
     text-align: center;
-    margin: 0 10px 10px 0;   
+    margin: 0 10px 10px 0;
+    -webkit-transform: scale(0.8);
+          transform: scale(0.8);
+  -webkit-transition: all .3s ease-in-out;
+  transition: all .3s ease-in-out;  
+}
+
+.Product:hover {
+    background-color: #2b3039;
+  -webkit-transform: scale(1);
+          transform: scale(1);
+  cursor: pointer;
 }
 .Product > .ProductImage{
     width: 80%;
@@ -36,9 +47,62 @@
     margin: 0 auto;
 }
 .Product > .ProductImage > img{
-    max-width: 100%;
+    width: 200px;
     height: 300px;
 }
+
+.priceP span {
+    font-size: 12px;
+    display: inline-block;
+    vertical-align: top;
+  }
+
+.priceP {
+font-size: 16px;
+color: #fe8033;
+} 
+
+.btnP {
+    width: 130px;
+    height: 35px;
+    font-size: 12px;
+    border-radius: 35px;
+    background-color: #2d343e;
+    color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    -webkit-transition: background-color .3s ease;
+    transition: background-color .3s ease;
+  
+    margin-left: 55px;
+
+    display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  }
+
+
+  .Product:hover .ProductDetails .btnP{
+    background-color: #fe8033;
+    font-size: 18px;
+    font-weight: 200;
+    color: #fff;
+  }
+  .Product:hover .ProductDetails .priceP{
+    font-size: 17px;
+  }
+  .Product:hover .ProductDetails .nameP{
+    font-size: 18px;
+    font-weight: 200;
+    color: #fff;
+  }
+  
+
 .ProductDetails{
     margin: 20px 0;
 }
@@ -78,8 +142,6 @@
     font-weight: bold;
 }
 .FilterButton{
-    background: #eee;
-    border: 1px solid #cecece;
     width: 95%;
     margin: 2px 5px;
     padding: 5px 0;
@@ -88,4 +150,10 @@
     font-weight: bold;
     font-family: 'Lato', sans-serif;
     font-size: 12px;
+    background-color: #22402b;
+    color: white;
+}
+.FilterButton:hover{
+    background-color: black;
+    color: white;
 }

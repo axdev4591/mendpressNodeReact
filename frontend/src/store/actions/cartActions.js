@@ -1,4 +1,5 @@
-import { base_url } from "'../../constants/index'";
+import { base_url } from '../../constants/index'
+import Cookie from 'js-cookie';
 
 import {
 ADD_TO_CART,
@@ -121,7 +122,7 @@ const removeFromCart = (productId) => (dispatch, getState) => {
     dispatch({ type: CART_SAVE_PAYMENT, payload: data });
   }
 */
-export default {
+export {
     addToCart,
     getCartItems,
     updateCart,

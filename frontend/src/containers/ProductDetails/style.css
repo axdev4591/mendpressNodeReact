@@ -26,12 +26,19 @@
     display: flex;
     justify-content: center;
 }
+
+
+.ActionButtonWrapper > button:hover{
+    background: black;
+    color: #fff;
+}
+
 .ActionButtonWrapper > button{
     width: 40%;
     height: 40px;
     margin: 10px;
     border: 0;
-    background:#ff9f00;
+    background: #22402b;
     cursor: pointer;
     color: #fff;
     font-weight: bold;

@@ -1,9 +1,7 @@
 import { Link } from 'react-router-dom'
 import './style.css';
 import Logo from '../../Logo';
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { logout, update } from '../../store/actions/userActions'
+import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 const MainHeader = (props) => {

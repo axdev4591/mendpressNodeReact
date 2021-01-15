@@ -5,13 +5,15 @@ const productCtrl = require('../controllers/products')
 const multer = require('../middleware/multer-config')
 
 
-router.post('/create', authenticate, multer, productCtrl.createProduct);
+router.post('/create', authenticate, multer, productCtrl.createProduct)
 
-router.get('/', productCtrl.getAllProducts);
+router.get('/', productCtrl.getAllProducts)
 
-router.get('/:categorySlug', productCtrl.getCategorySlug);
+router.get('/:filter', productCtrl.getAllProducts)
 
-router.get('/:categorySlug/:productSlug', productCtrl.getProduct);
+router.get('/:categorySlug/:filter', productCtrl.getProductsByCategory);
+
+router.get('/detail/:categorySlug/:productSlug', productCtrl.getSingleProduct);
 
 router.put('/update/:id', authenticate, multer, productCtrl.updateProduct)
 

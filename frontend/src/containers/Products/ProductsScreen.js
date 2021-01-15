@@ -34,6 +34,9 @@ const ProductsScreen = (props) => {
   const [deleteItem, setDeleteItem] = useState(false);
   const [delProduct,  setDelProduct] = useState(null)
 
+  const userSignin = useSelector(state => state.userSignin);
+  const {userInfo, error } = userSignin
+  
   const productList = useSelector((state) => state.productList)
   const {loading, products} = productList
 
@@ -61,9 +64,9 @@ const ProductsScreen = (props) => {
       setModalVisible(false);
     }
     dispatch(listCategories())
-    dispatch(listProducts(token))
+    dispatch(listProducts(userInfo.token))
 
-  }, [successSave, successDelete]);
+  }, [successSave, successDelete])
 
   const openModal = (product) => {
     setModalVisible(true);
@@ -90,7 +93,7 @@ const ProductsScreen = (props) => {
         description,
         slug,
         create
-      }, token)
+      }, userInfo.token)
     )
     console.log("category: "+category)
   }
@@ -111,7 +114,7 @@ const ProductsScreen = (props) => {
       }
     })
 
-    dispatch(deleteProduct(delProduct, token))
+    dispatch(deleteProduct(delProduct, userInfo.token))
     setDelProduct(null)
   }
   }
@@ -317,7 +320,7 @@ const ProductsScreen = (props) => {
               setDeleteItem(false)
               setDelProduct(null)
               dispatch(listCategories())
-              dispatch(listProducts(token))
+              dispatch(listProducts(userInfo.token))
               }} color="primary">
             Non
           </Button>
@@ -328,7 +331,7 @@ const ProductsScreen = (props) => {
               setDeleteItem(true)
               deleteHandler(e)
               dispatch(listCategories())
-              dispatch(listProducts(token))
+              dispatch(listProducts(userInfo.token))
               }} color="primary">
             Oui
           </Button>
