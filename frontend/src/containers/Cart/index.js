@@ -13,8 +13,8 @@ import { useDispatch, useSelector } from 'react-redux'
 const Cart = (props) => {
 
   const cart = useSelector(state => state.cart);
-  const { cartItems } = cart;
-  const [cartItem, setCartItem] = useState(null)
+  const { cartItem, totalAmount, cartCount} = cart
+  const [cartItems, setCartItems] = useState(null)
 
   const userSignin = useSelector(state => state.userSignin);
   const { loading, userInfo, error } = userSignin;
@@ -42,7 +42,7 @@ const Cart = (props) => {
   const  updateCart = async (productId, quantity) => {
         try{
             
-            let product = cartItems.find(item => item.product === productId);
+            let product = cartItem.find(item => item.product === productId);
             product = {
                 productId: product.product,
                 quantity: parseInt(product.quantity) + parseInt(quantity),
@@ -56,10 +56,9 @@ const Cart = (props) => {
             const response = await dispatch(updateCart(userInfo.token, userInfo._id, product))
             if(response.ok == 1){
 
-               setCartItem({
-                    cartItems: cartItems.map(item => item.product === productId ? 
+             /*  setCartItems( cartItem.map(item => item.product === productId ? 
                         {...item, quantity: item.quantity + quantity, total: item.total + (item.price * quantity)}: item)
-                })
+                )*/
             }
         }catch(error){
             console.log(error);
@@ -97,12 +96,12 @@ const Cart = (props) => {
                         </div>
                         <div className="CardBody">
 
-                            {cartItems.length === 0 ?
+                            {cartItem.length === 0 ?
                                 <div>
                                 Vous n'avez acun article dans votre panier
                                 </div>
                                      :
-                                cartItems.map(product => 
+                                     cartItem.map(product => 
                                     <CartItem
                                         key={product.product}
                                         productId={product.product}

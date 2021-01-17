@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 const MainHeader = (props) => {
   
     const cart = useSelector(state => state.cart);
-    const { cartItems } = cart
+    const { cartItem, totalAmount, cartCount} = cart
 
     return (
         <div className="MainHeader">
@@ -24,7 +24,7 @@ const MainHeader = (props) => {
                 </div>
             </div>
             <div>
-                <Link to="/cart"><i className="fas fa-shopping-cart"></i>(<span style={{color: "orange"}}>{cartItems.cartCount}</span>)</Link>
+                <Link to="/cart"><i className="fas fa-shopping-cart"></i>(<span style={{color: "orange"}}>{cartCount}</span>)</Link>
                 
             </div>
         </div>

@@ -26,62 +26,44 @@ const update = ({ userId, firstName, lastName, email, password }) => async (disp
 }
 
 const signin = (email, password) => async (dispatch) => {
-  dispatch({ type: USER_SIGNIN_REQUEST, payload: { email, password } });
+  dispatch({ type: USER_SIGNIN_REQUEST, payload: { email, password } })
   try {
 
-    if(email=="axdev2020@gmail.com"){
       const { data } = await Axios.post(`${base_url}/user/login`, {
-        headers: {
-            'Content-Type' : 'application/json',
-            'Accepts': 'application/json'
-        },
-        body: JSON.stringify({
             email: email,
             password: password
         })
-     })
+
      dispatch({ type: USER_SIGNIN_SUCCESS, payload: data });
-     Cookie.set('userInfo', JSON.stringify(data));
-    }else{
-      const { data } = await Axios.post(`${base_url}/user/login`, {
-        headers: {
-            'Content-Type' : 'application/json',
-            'Accepts': 'application/json'
-        },
-        body: JSON.stringify({
-            email: email,
-            password: password
-        })
-     })
-     dispatch({ type: USER_SIGNIN_SUCCESS, payload: data });
-    Cookie.set('userInfo', JSON.stringify(data));
-    }
-    
-    
+     Cookie.set('userInfo', JSON.stringify(data))
+
+     console.log("userinfo connected "+ JSON.stringify(data))
+  
   } catch (error) {
     dispatch({ type: USER_SIGNIN_FAIL, payload: error.message });
   }
 }
 
 const register = (firstName, lastName, email, password) => async (dispatch) => {
-  dispatch({ type: USER_REGISTER_REQUEST, payload: { firstName, lastName, email, password } });
+
+  dispatch({ type: USER_REGISTER_REQUEST, payload: { firstName, lastName, email, password } })
+
   try {
     const { data } = await Axios.post(`${base_url}/user/signup`, {
-      headers: {
-          'Content-Type': 'application/json',
-          'Accepts': 'application/json'
-      },
-      body: JSON.stringify({
-          firstName: firstName,
-          lastName: lastName,
-          email: email,
-          password: password
-      })
-  });
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        password: password
+    })
+
+  console.log(JSON.stringify(data))
     dispatch({ type: USER_REGISTER_SUCCESS, payload: data });
-    Cookie.set('userInfo', JSON.stringify(data));
+    Cookie.set('userInfo', JSON.stringify(data))
+
   } catch (error) {
-    dispatch({ type: USER_REGISTER_FAIL, payload: error.message });
+    dispatch({ type: USER_REGISTER_FAIL, payload: error.message })
+
+    console.log(JSON.stringify(error))
   }
 }
 

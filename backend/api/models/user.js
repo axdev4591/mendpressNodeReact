@@ -8,6 +8,8 @@ const userSchema = mongoose.Schema({
         type: String,
         required: true,
         unique: true,
+        index: true,
+        dropDups: true,
         match: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
      },
      password: {
@@ -17,7 +19,9 @@ const userSchema = mongoose.Schema({
      contact: { type: String },
      profilePic: { type: String },
      createdAt: Date,
-     updatedAt: Date
+     updatedAt: Date,
+     isAdmin: { type: Boolean, required: true, default: false }
 });
+
 
 module.exports = mongoose.model('User', userSchema);

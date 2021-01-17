@@ -1,16 +1,14 @@
+import Axios from "axios";
+import Cookie from "js-cookie";
+import { ADD_TO_CART, GET_CART_DETAILS, UPDATE_CART, CLEAR_CART, CART_ADD_ITEM } 
+from "../../constants/cartConstants"
 import { base_url } from '../../constants/index'
-import Cookie from 'js-cookie';
-
-import {
-ADD_TO_CART,
-GET_CART_DETAILS,
-UPDATE_CART,
-CLEAR_CART,
-} from '../../constants/cartConstants'
-
- const addToCart = (token, cartItem) => {
-    return async (dispatch, getState) => {
+/*
+export const addToCart = (token, cartItem) => {
+    return async dispatch => {
         try{
+            console.log("anana add cart "+JSON.stringify(cartItem))
+            console.log("anana add cart token"+JSON.stringify(token))
             const response = await fetch(`${base_url}/cart/add`, {
                 headers: {
                     'Content-Type': 'application/json',
@@ -24,10 +22,8 @@ CLEAR_CART,
                 dispatch({
                     type: ADD_TO_CART,
                     cartItem: cartItem
-                })
+                });
             }
-            const { cart: { cartItems } } = getState();
-            Cookie.set("cartItems", JSON.stringify(cartItems));
 
             return jsonResposne;
         }catch(error){
@@ -35,8 +31,37 @@ CLEAR_CART,
         }
     }
 }
+*/
 
- const getCartItems = (token, userId) => {
+
+export const addToCart = (cartItem) => async (dispatch, getState) => {
+    try {
+        console.log("add item to cart "+JSON.stringify(cartItem))
+      const { userSignin: { userInfo } } = getState();
+      const { data } = await Axios.post(`${base_url}/cart/add`, cartItem, {
+        headers: {
+          Authorization: ' Bearer ' + userInfo.token
+        }
+      })
+
+      console.log("item *********** "+ JSON.stringify(data.message))
+
+
+      dispatch({
+        type: ADD_TO_CART,
+        cartItem: cartItem
+       })
+     
+      const { cart: { cartItems } } = getState();
+      Cookie.set("cartItems", JSON.stringify(cartItems));
+      console.log("cartItems *********** "+ JSON.stringify(cartItems))
+  
+    } catch (error) {
+  
+    }
+  }
+
+export const getCartItems = (token, userId) => {
     return async dispatch => {
 
         try{
@@ -54,7 +79,9 @@ CLEAR_CART,
                 dispatch({
                     type: GET_CART_DETAILS,
                     cartItems: jsonResposne.message[0]
-                });
+                })
+               // const { cart: { cartItems } } = getState()
+                //Cookie.set("cartItems", JSON.stringify(cartItems))
             }
 
             return jsonResposne.message[0];
@@ -66,7 +93,7 @@ CLEAR_CART,
     }
 }
 
- const updateCart = (token, userId, product) => {
+export const updateCart = (token, userId, product) => {
     return async dispatch => {
         try{
 
@@ -101,30 +128,11 @@ CLEAR_CART,
     }
 }
 
- const clearCart = (productId) => (dispatch, getState) => {
-    dispatch({ type: CLEAR_CART, payload: productId })
-  
-    const { cart: { cartItems } } = getState();
-    Cookie.set("cartItems", JSON.stringify(cartItems))
-}
-
-
-const removeFromCart = (productId) => (dispatch, getState) => {
-    dispatch({ type: CLEAR_CART, payload: productId });
-  
-    const { cart: { cartItems } } = getState();
-    Cookie.set("cartItems", JSON.stringify(cartItems));
-  }
- /* const saveShipping = (data) => (dispatch) => {
-    dispatch({ type: CART_SAVE_SHIPPING, payload: data });
-  }
-  const savePayment = (data) => (dispatch) => {
-    dispatch({ type: CART_SAVE_PAYMENT, payload: data });
-  }
-*/
-export {
-    addToCart,
-    getCartItems,
-    updateCart,
-    clearCart
+export const clearCart = () => {
+    return dispatch => {
+        dispatch({
+            type: CLEAR_CART,
+            payload: null
+        });
+    }
 }

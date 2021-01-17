@@ -84,7 +84,6 @@ exports.getAllProducts = (req, res, next) => {
 exports.getSingleProduct = (req, res, next) => {
 
     const productSlug = req.params.productSlug;
-    console.log("can't get single product "+JSON.stringify(productSlug) )
     
     Product.findOne({slug: productSlug})
     .exec()

@@ -31,23 +31,25 @@ const ProductDetails = (props) => {
   }, [slug, category]);
 
 
-  const addToCart = (product) => {
+  const addItemToCart = (product) => {
 
     if(!userInfo){
         props.history.push('/login');
         return;
-    }
-
-    const cartItem = {
-        user: userInfo.id,
-        product: product._id,
-        name: product.name,
-        imageUrl: product.imageUrl,
-        quantity: 1,
-        price: product.price
-    }
-
-   dispatch(addToCart(userInfo.token, cartItem))
+    }else {
+        if(!userInfo.isAdmin){
+            const cartItem = {
+                user: userInfo.id,
+                product: product._id,
+                name: product.name,
+                imageUrl: product.imageUrl,
+                quantity: 1,
+                price: product.price
+            }
+        
+           dispatch(addToCart(cartItem))
+        }
+    } 
    
 }
 
@@ -63,7 +65,7 @@ const ProductDetails = (props) => {
                             <img src={product.imageUrl} alt="" />
                         </div>
                         <div className="ActionButtonWrapper">
-                             <button  style={{marginRight: "6px"}} onClick={() => { addToCart(product) }}><i className="fas fa-shopping-cart" style={{marginRight: "3px"}}></i>&nbsp;Ajouter au panier</button>        
+                             <button  style={{marginRight: "6px"}} onClick={() => addItemToCart(product)}><i className="fas fa-shopping-cart" style={{marginRight: "3px"}}></i>&nbsp;Ajouter au panier</button>        
                         </div>
                         
                     </div>
@@ -90,7 +92,9 @@ const ProductDetails = (props) => {
                          
                         </div>
                         <div style={{marginTop: "51px"}} className="ActionButtonWrapper">
-                        <button style={{marginRight: "6px"}}><i className="fas fa-bolt" style={{marginRight: "3px"}}></i>&nbsp;Acheter maintenant</button>
+                        <button onClick={() => { if(userInfo){
+                                  }
+                                  }} style={{marginRight: "6px"}}><i className="fas fa-bolt" style={{marginRight: "3px"}}></i>&nbsp;Acheter maintenant</button>
                         </div>
                     </div>
                 </div>

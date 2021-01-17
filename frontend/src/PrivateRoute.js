@@ -13,13 +13,10 @@ const PrivateRoute = ({component: Component, ...rest}) => {
 
         if(userInfo){
           
-            if(userInfo.token !== ''){
                 return <Component {...props} />
-            }else{
-                return <Redirect to="/login" />
-            }
         }else{
-            return <Redirect to="/login" />
+                return <Redirect to="/login" />
+            
         }
         
 

@@ -13,7 +13,7 @@ const  Header = (props) =>  {
   const userSignin = useSelector(state => state.userSignin);
   const { loading, userInfo, error } = userSignin;
   const cart = useSelector(state => state.cart);
-  const { cartItems } = cart;
+  const { cartItem, totalAmount, cartCount} = cart
   const dispatch = useDispatch();
  
 
@@ -24,12 +24,12 @@ const  Header = (props) =>  {
         props.history.push("/");
     }
 
-    const cartCount = userInfo ? cart.cartCount : '';
+    const cartCounter = userInfo ? cartCount : '';
 
     return (
         <header className="Header">
             <TopHeader logout={handleLogout} />
-            <MainHeader cartCount={cartCount} />
+            <MainHeader cartCount={cartCounter} />
             <BottomHeader />
         </header>
     );

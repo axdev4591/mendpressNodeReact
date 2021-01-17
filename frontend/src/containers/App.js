@@ -38,9 +38,10 @@ import cartReducers from '../store/reducers/cartReducers';
 const cartItems = Cookie.getJSON('cartItems') || [];
 const userInfo = Cookie.getJSON('userInfo') || null;
 
+
+
 const initialState = {
-  cart: { cartItems, shipping: {}, payment: {} },
-  userSignin: { userInfo },
+  userSignin: { userInfo }
 }
 
 const reducer = combineReducers({
@@ -71,6 +72,7 @@ const store = createStore(
 window.store = store;
 
 function App() {
+
   return (
 
     <Provider store={store}>
@@ -78,18 +80,23 @@ function App() {
         <div className="App">
             <Switch>
               
-             {/**
+      
+              
+              <Route path="/login" component={Login} />  
               <Route path="/signup" component={Signup} />
+              
+              
+              <Route path="/"  component={ShopeStore} />
+              <PrivateRoute path="/cart" component={Cart} />
+
+
               <Route path="/forget-password" component={ForgetPassword} />
               <Route path="/cpanel" component={ControlPanel} />
-             a retirer <Route path="/products/:category/:slug" component={ProductDetails} />
-             a retirer <Route path="/products"  component={Shop} />
-              <PrivateRoute path="/cart" component={Cart} />
+                  {/**
               <PrivateRoute path="/place-order" component={PlaceOrder} />
               <PrivateRoute path="/thank-you" component={ThankYou} />
-              <PrivateRoute path="/orders" component={Orders} />*/}  
-              <Route path="/login" component={Login} />
-              <Route path="/"  component={ShopeStore} /> 
+              <PrivateRoute path="/orders" component={Orders} />*/}
+               
                  
                          
             </Switch>

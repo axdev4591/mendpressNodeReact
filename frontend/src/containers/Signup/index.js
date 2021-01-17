@@ -23,15 +23,18 @@ const Signup = (props) => {
   //const redirect = props.location.search ? props.location.search.split("=")[1] : '/';
   const dispatch = useDispatch();
 
-  /*
+ 
+
   useEffect(() => {
     if (userInfo) {
-      props.history.push('/');
+      props.history.push('/login');
     }
+    console.log("user data: "+JSON.stringify(userInfo))
+    console.log("error: "+JSON.stringify(error))
     return () => {
       //
     };
-  }, [userInfo])*/
+  }, [userInfo])
   
 
    const signupHandler = (e) => {
@@ -76,16 +79,20 @@ const Signup = (props) => {
             return
         }
         dispatch(register(firstName, lastName, email, password))
+        
+        if(!error){
+            props.history.push('/login');
+        }
     }
 
   return (
-    <div className="LoginContainer">
+    <div className="LoginContainer" style={{marginBottom: "33px"}}>
         <div className="WelcomeText">
-            <h3>Create Account</h3>
+            <h3>Créer un compte</h3>
         </div>
           {loading && <div>Loading...</div>}
           {error && <div>{error}</div>}
-        <img src={Logo} alt="logo" height="80" width="260"/> 
+        <img src={Logo} alt="logo" height="80" width="300"/> 
         <div className="LoginWrapper">
             <form onSubmit={signupHandler} autoComplete="off">
 
@@ -93,7 +100,7 @@ const Signup = (props) => {
                     <div style={{width: '49%'}}>
                         <MobileTypeInput 
                             type="text"
-                            placeholder="First Name"
+                            placeholder="Nom"
                             value={firstName}
                             textChange={(e) => setFirstName(e.target.value)}
                             name="firstName"
@@ -102,7 +109,7 @@ const Signup = (props) => {
                     <div style={{width: '49%'}}>
                         <MobileTypeInput 
                             type="text"
-                            placeholder="Last Name"
+                            placeholder="Prenom"
                             value={lastName}
                             textChange={(e) => setLastName(e.target.value)}
                             name="lastName"
@@ -120,14 +127,14 @@ const Signup = (props) => {
                 />
                 <MobileTypeInput 
                     type="password"
-                    placeholder="Password"
+                    placeholder="Mot de passe"
                     value={password}
                     textChange={(e) => setPassword(e.target.value)}
                     name="password"
                 />
                 <MobileTypeInput 
                     type="password"
-                    placeholder="Re-enter Password"
+                    placeholder="Confirmation de mot de passe"
                     value={repassword}
                     textChange={(e) => setRepassword(e.target.value)}
                     name="repassword"
@@ -138,14 +145,14 @@ const Signup = (props) => {
                 </Error>
 
                 <SubmitGradientButton 
-                    label="Signup"
+                    label="S'inscrire"
                     style={{marginTop: '30px'}}
                 />
             </form>
         </div>
         <div style={{display: 'flex', justifyContent: 'space-between'}}>
-            <Link to="/login">Login</Link>
-            <Link to="/forget-password">Forgot Password ?</Link>
+            <Link to="/login">Se connecter</Link>
+            <Link to="/forget-password">Mot de passe oublié ?</Link>
         </div>
         
         

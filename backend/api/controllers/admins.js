@@ -76,7 +76,7 @@ exports.login = (req, res, next) => {
 
 }
 
-exports.signup = (req, res, next) => {
+exports.signup1 = (req, res, next) => {
 
     Admin.find({email: req.body.email})
     .exec()
@@ -120,4 +120,19 @@ exports.signup = (req, res, next) => {
 
     
 
+}
+
+exports.signup = async (req, res) => {
+    try {
+      const user = new User({
+        name: 'admin',
+        email: 'admin@example.com',
+        password: '1234',
+        isAdmin: true,
+      });
+      const newUser = await user.save();
+      res.send(newUser);
+    } catch (error) {
+      res.send({ message: error.message });
+    }
 }

@@ -5,14 +5,16 @@ const cors = require('cors');
 const authenticate = require('./api/middleware/authenticate');
 const path = require('path')
 const bodyParser = require('body-parser');
+const config =  require('./config')
+const util = require('./util')
 
-
-//Connect to mongoDB
-mongoose.connect('mongodb+srv://'+ process.env.MONGODB_USERNAME +':'+ process.env.MONGODB_PASSWORD +'@cluster0.t0x6x.mongodb.net/mendpressdb?retryWrites=true&w=majority',
-  { useNewUrlParser: true,
-    useUnifiedTopology: true })
-  .then(() => console.log('Connexion à MongoDB réussie !'))
-  .catch(() => console.log('Connexion à MongoDB échouée !'));
+  mongoose
+  .connect(config.MONGODB_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+  }).then(() => console.log('Successfully connected to MongoDB  !'))
+  .catch((error) => console.log("Connection to MongoDb failed"+ error.reason));
 
 
 const adminRoutes = require('./api/routes/admins');
@@ -30,8 +32,8 @@ app.use('/admin', adminRoutes)
 app.use('/category', categoryRoutes)
 app.use('/user', userRoutes)
 app.use('/products', productRoutes)
-app.use('/cart', authenticate, cartItemRoutes)
-app.use('/order', authenticate, orderRoutes)
+app.use('/cart', util.isAuth, cartItemRoutes)
+app.use('/order', util.isAuth, orderRoutes)
 app.use('/images', express.static(path.join(__dirname, 'images')))
 app.use((req, res, next) => {
     res.status(404).json({

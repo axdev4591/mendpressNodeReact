@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import './style.css';
-import React from 'react'
+import React, { useEffect } from 'react'
 import { logout, update } from '../../../store/actions/userActions'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -13,8 +13,8 @@ const TopHeader = (props) => {
 
     const handleLogout = () => {
       dispatch(logout());
-      props.history.push("/");
     }
+
  
     let guestAccount = <ul className="Dropdown Account">
                             <li><Link to="/signup"><i className="fas fa-user"></i>&nbsp;&nbsp;<span>S'inscrire</span></Link></li>
@@ -23,7 +23,7 @@ const TopHeader = (props) => {
     
     if(userInfo){
 
-        if(userInfo.username=="admin"){
+        if(userInfo.isAdmin==true){
             guestAccount = <ul className="Dropdown Account">
             <li><Link to="/orders"><i className="far fa-clipboard"></i>&nbsp;&nbsp;<span>Commandes</span></Link></li>
             <li><Link to="/manageusers"><i className="fas fa-users"></i>&nbsp;&nbsp;<span>Utilisateurs</span></Link></li>
@@ -53,7 +53,7 @@ const TopHeader = (props) => {
                     <ul className="TopMenu">
                         <li className="MenuItem">
                             <i className="fas fa-user-circle" ></i>&nbsp;&nbsp;
-                            <Link to="/account">{userInfo ? userInfo.username: 'Mon compte'}</Link>
+                            <Link to="/account">{userInfo ? userInfo.firstName: 'Mon compte'}</Link>
         
                             {guestAccount}
                         </li>
