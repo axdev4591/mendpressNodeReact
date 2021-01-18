@@ -64,7 +64,6 @@ import {
 
   //retrieve product for admin dashboard
   const listProducts = (categorySlug = '', filter) => async (dispatch) => {
-    console.log("list des produit: *****************")
      
         if(categorySlug == ''){
           try{

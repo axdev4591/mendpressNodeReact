@@ -4,10 +4,13 @@ import Logo from '../../Logo';
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
+
 const MainHeader = (props) => {
   
     const cart = useSelector(state => state.cart);
     const { cartItem, totalAmount, cartCount} = cart
+    const userSignin = useSelector((state) => state.userSignin)
+    const { userInfo } = userSignin
 
     return (
         <div className="MainHeader">
@@ -24,7 +27,7 @@ const MainHeader = (props) => {
                 </div>
             </div>
             <div>
-                <Link to="/cart"><i className="fas fa-shopping-cart"></i>(<span style={{color: "orange"}}>{cartCount}</span>)</Link>
+                <Link to="/cart"><i className="fas fa-shopping-cart"></i>(<span style={{color: "orange"}}>{ userInfo ? cartCount : 0 }</span>)</Link>
                 
             </div>
         </div>

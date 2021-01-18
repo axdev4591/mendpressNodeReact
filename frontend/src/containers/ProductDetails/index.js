@@ -4,11 +4,11 @@ import './style.css';
 import React, {useEffect,  useState } from 'react';
 import { useSelector, useDispatch} from 'react-redux'
 import {useParams } from 'react-router-dom'
-import { detailsProduct } from '../../store/actions/productActions';
-import { addToCart } from '../../store/actions/cartActions'
+import { detailsProduct } from '../../store/actions/productActions'
 import {usePath} from 'hookrouter';
 //import Rating from '../components/Rating';
 //import { PRODUCT_REVIEW_SAVE_RESET } from '../constants/productConstants';
+import { addToCart, updateCart, getCartItems } from '../../store/actions/cartActions'
 
 const ProductDetails = (props) => {
   const userSignin = useSelector((state) => state.userSignin)
@@ -17,13 +17,18 @@ const ProductDetails = (props) => {
   const { product, loading, error } = productDetails
   const dispatch = useDispatch()
   const { category, slug } = useParams()
-  const { category1, slug1 } = props.match.params;
+  const cart = useSelector(state => state.cart);
+  const { cartItems, totalAmount, cartCount} = cart
 
-  console.log('params***************************** '+category+category1)
 
   useEffect(() => {
     
     dispatch(detailsProduct(category, slug))
+
+    if(userInfo){
+        dispatch(getCartItems(userInfo))
+    }
+
 
     return () => {
       //
@@ -39,7 +44,7 @@ const ProductDetails = (props) => {
     }else {
         if(!userInfo.isAdmin){
             const cartItem = {
-                user: userInfo.id,
+                user: userInfo.userId,
                 product: product._id,
                 name: product.name,
                 imageUrl: product.imageUrl,
@@ -47,7 +52,7 @@ const ProductDetails = (props) => {
                 price: product.price
             }
         
-           dispatch(addToCart(cartItem))
+           dispatch(addToCart(userInfo, cartItem))
         }
     } 
    

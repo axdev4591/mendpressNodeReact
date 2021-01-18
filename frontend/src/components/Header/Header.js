@@ -4,7 +4,8 @@ import TopHeader from './TopHeader/TopHeader';
 import MainHeader from './MainHeader/MainHeader';
 import BottomHeader from './BottomHeader/BottomHeader'
 
-import React from 'react'
+import { addToCart, updateCart, getCartItems} from '../../store/actions/cartActions'
+import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import { logout, update } from '../../store/actions/userActions';
 
@@ -17,6 +18,10 @@ const  Header = (props) =>  {
   const dispatch = useDispatch();
  
 
+  useEffect(() => {
+    dispatch(getCartItems(userInfo))
+    
+  }, [])
  
   const handleLogout = () => {
         props.logout();

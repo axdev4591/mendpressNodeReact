@@ -7,6 +7,8 @@ import { useSelector, useDispatch } from 'react-redux';
 const PrivateRoute = ({component: Component, ...rest}) => {
     const userSignin = useSelector(state => state.userSignin);
     const { userInfo } = userSignin
+
+    console.log("prrrrrrrrrrrrrr")
     
     return <Route {...rest} render={(props) => {
         

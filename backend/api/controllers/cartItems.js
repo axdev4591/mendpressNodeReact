@@ -4,6 +4,7 @@ const CartItem = require('../models/cartItem')
 exports.addToCart = (req, res, next) => {
 
     console.log("add to cart############ "+JSON.stringify(req.body))
+    console.log("add to cart############ "+JSON.stringify(req.body.user))
     CartItem.findOne({user: req.body.user})
     .exec()
     .then(cartItem => {
@@ -48,6 +49,7 @@ exports.addToCart = (req, res, next) => {
             
 
         }else{
+            console.log("get ############ "+JSON.stringify(req.body.user))
             const newCartItem = new CartItem({
                 _id: new mongoose.Types.ObjectId(),
                 user: req.body.user,
@@ -88,16 +90,21 @@ exports.addToCart = (req, res, next) => {
 
 exports.getUserCartItems =  (req, res, next) => {
 
-    const userId = req.params.userId;
+    const userId = req.params.userId
+    console.log("get cart items: "+ userId)
 
     CartItem.find({user: userId})
     .select('_id user cart')
     .populate('cart.product', 'name imageUrl')
     .exec()
     .then(cartItems => {
+        console.log("get cart items: "+cartItems)
         res.status(200).json({
-            message: cartItems
+            message: cartItems 
         })
+        
+    }).catch(err => {
+        console.log("ann error occured: "+err)
     })
 }
 
@@ -108,7 +115,7 @@ exports.QtyUpdate = (req, res, next) => {
     const quantity = req.body.quantity;
     const total = req.body.total;
 
-    CartItem.update({"user": userId, "cart.product": productId}, {
+    CartItem.updateOne({"user": userId, "cart.product": productId}, {
         $set : {
             "cart.$.quantity": quantity,
             "cart.$.total": total

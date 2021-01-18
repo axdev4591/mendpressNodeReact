@@ -41,8 +41,7 @@ const CartItem = props => {
                     increaseQuantity={props.increaseQuantity}
                     decreaseQuantity={props.decreaseQuantity}
                 />
-                <a href="#">Supprimer</a>
-                <button type="button" className="button" onClick={() => removeFromCartHandler()} >
+                <button type="button" className="btn" onClick={() => removeFromCartHandler()} >
                  Supprimer
                  </button>
             </div>

@@ -3,8 +3,8 @@
     align-items: center;
 }
 .QunantityControl input{
-    width: 50px;
-    height: 30px;
+    width: 30px;
+    height: 9px;
     border-radius: 2px;
     border: 1px solid #cecece;
     text-align: center;

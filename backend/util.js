@@ -20,6 +20,7 @@ exports.getToken = (user) => {
 
 exports.isAuth = (req, res, next) => {
   const token = req.headers.authorization;
+  console.log("token************** "+token)
 
   if (token) {
     const onlyToken = token.slice(7, token.length);
@@ -27,7 +28,7 @@ exports.isAuth = (req, res, next) => {
       if (err) {
         return res.status(401).send({ message: 'Invalid Token' });
       }
-      req.user = decode;
+      req.user = decode
       next();
       return;
     });

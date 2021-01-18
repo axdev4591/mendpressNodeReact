@@ -35,7 +35,7 @@ import { userSigninReducer, userRegisterReducer, userUpdateReducer} from '../sto
 //Cart reducers
 import cartReducers from '../store/reducers/cartReducers';
 
-const cartItems = Cookie.getJSON('cartItems') || [];
+const cartItems = Cookie.getJSON('cartItem') || [];
 const userInfo = Cookie.getJSON('userInfo') || null;
 
 
@@ -67,8 +67,6 @@ const store = createStore(
 );
 
 
-//const store = createStore(rootReducers, applyMiddleware(thunk));
-
 window.store = store;
 
 function App() {
@@ -84,15 +82,15 @@ function App() {
               
               <Route path="/login" component={Login} />  
               <Route path="/signup" component={Signup} />
-              
+               <PrivateRoute path="/cart" component={Cart} />
               
               <Route path="/"  component={ShopeStore} />
-              <PrivateRoute path="/cart" component={Cart} />
+             
+                  {/**
 
 
               <Route path="/forget-password" component={ForgetPassword} />
               <Route path="/cpanel" component={ControlPanel} />
-                  {/**
               <PrivateRoute path="/place-order" component={PlaceOrder} />
               <PrivateRoute path="/thank-you" component={ThankYou} />
               <PrivateRoute path="/orders" component={Orders} />*/}

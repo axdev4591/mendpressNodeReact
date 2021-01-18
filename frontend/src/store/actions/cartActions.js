@@ -34,64 +34,49 @@ export const addToCart = (token, cartItem) => {
 */
 
 
-export const addToCart = (cartItem) => async (dispatch, getState) => {
+export const addToCart = (userInfo, cartItems) => async (dispatch, getState) => {
     try {
-        console.log("add item to cart "+JSON.stringify(cartItem))
-      const { userSignin: { userInfo } } = getState();
-      const { data } = await Axios.post(`${base_url}/cart/add`, cartItem, {
+        const { data } = await Axios.post(`${base_url}/cart/add`, cartItems, {
         headers: {
           Authorization: ' Bearer ' + userInfo.token
         }
       })
-
-      console.log("item *********** "+ JSON.stringify(data.message))
-
-
       dispatch({
         type: ADD_TO_CART,
-        cartItem: cartItem
+        cartItem: cartItems
        })
      
-      const { cart: { cartItems } } = getState();
-      Cookie.set("cartItems", JSON.stringify(cartItems));
-      console.log("cartItems *********** "+ JSON.stringify(cartItems))
+      const { cart: { cartItem } } = getState();
+      Cookie.set("cartItem", JSON.stringify(cartItem));
   
     } catch (error) {
-  
+        console.log(error);
     }
   }
 
-export const getCartItems = (token, userId) => {
-    return async dispatch => {
+export const getCartItems = (userInfo) => async (dispatch, getState) => {
 
         try{
 
-            const response = await fetch(`${base_url}/cart/user/${userId}`, {
+            const data = await Axios.post(`${base_url}/cart/user/${userInfo.userId}`, userInfo, {
                 headers: {
-                    'Content-Type': 'application/json',
-                    'auth-token': token
-                },
-                method: 'POST'
-            });
-
-            const jsonResposne = await response.json();
-            if(response.status === 200){
-                dispatch({
-                    type: GET_CART_DETAILS,
-                    cartItems: jsonResposne.message[0]
-                })
-               // const { cart: { cartItems } } = getState()
-                //Cookie.set("cartItems", JSON.stringify(cartItems))
-            }
-
-            return jsonResposne.message[0];
-
+                  Authorization: ' Bearer ' + userInfo.token
+                }
+              })
+           
+            dispatch({
+                type: GET_CART_DETAILS,
+                cartItems: data.data.message[0]
+            })
+            const { cart: { cartItem } } = getState()
+            Cookie.set("cartItem", JSON.stringify(data.data.message[0]))
+      
         }catch(error){
             console.log(error);
         }
         
     }
-}
+
 
 export const updateCart = (token, userId, product) => {
     return async dispatch => {

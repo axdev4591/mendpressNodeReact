@@ -45,12 +45,14 @@ const cartReducers = (state = initState, actions) => {
             }
             break;
         case GET_CART_DETAILS:
+
             const cItem = actions.cartItems.cart;
             let totalAmt = 0;
             let quantityCount = 0;
             const updateCartItem = cItem.map(item => {
                 totalAmt += item.total;
                 quantityCount += item.quantity;
+                
                 return {
                     product: item.product._id,
                     name: item.product.name,
@@ -59,6 +61,7 @@ const cartReducers = (state = initState, actions) => {
                     quantity: item.quantity,
                     total: item.total
                 }
+
             })
             state = {
                 cartItem: updateCartItem,
@@ -88,7 +91,6 @@ const cartReducers = (state = initState, actions) => {
                 totalAmount: 0,
                 cartCount: 0
             }
-            break;
         default:
             break;
     }
