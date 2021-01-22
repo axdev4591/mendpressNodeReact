@@ -68,20 +68,20 @@ const Cart = (props) => {
 
   const changeQuantity = (e, productId) => {
 
-        // console.log(e.target.value);
+         console.log(e.target.value);
 
-        // if(isNaN(e.target.value)){
-        //     return;
-        // }
+         if(isNaN(e.target.value)){
+         return;
+         }
 
-        // const firstDigit = parseInt(e.target.value.split("")[0]);
-        // if(firstDigit === 0){
-        //     return;
-        // }
+        const firstDigit = parseInt(e.target.value.split("")[0]);
+        if(firstDigit === 0){
+            return;
+        }
 
         // //alert(e.target.value);
 
-        // this.updateCart(productId, parseInt(e.target.value));
+        updateCart(productId, parseInt(e.target.value));
     }
 
     console.log("************mon panier******* "+JSON.stringify(cartItem))

@@ -7,7 +7,7 @@ import {
     clearCart } from '../../../store/actions/cartActions'
 
 
-const CartItem = props => {
+const CartItem = (props) => {
 
     const dispatch = useDispatch();
     const removeFromCartHandler = () => {
